@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Sparkles, User, X } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 gsap.registerPlugin(useGSAP);
 
@@ -114,8 +116,16 @@ export default function ChatInterface({ onReset }: { onReset: () => void }) {
             
             <div className={`flex flex-col ${msg.role === "user" ? "items-end" : "items-start"} max-w-[80%]`}>
               <span className="text-[10px] uppercase tracking-widest text-white/40 mb-1.5 font-semibold">{msg.role === "user" ? "You" : "InsightAI"}</span>
-              <div className={`text-sm leading-relaxed whitespace-pre-wrap p-4 rounded-2xl ${msg.role === "user" ? "bg-indigo-600 text-white rounded-tr-sm" : "bg-white/5 border border-white/10 text-white/90 rounded-tl-sm"}`}>
-                {msg.text}
+              <div className={`text-sm leading-relaxed p-4 rounded-2xl ${msg.role === "user" ? "bg-indigo-600 text-white rounded-tr-sm whitespace-pre-wrap" : "bg-white/5 border border-white/10 text-white/90 rounded-tl-sm"}`}>
+                {msg.role === "user" ? (
+                  msg.text
+                ) : (
+                  <div className="prose prose-invert prose-sm max-w-none prose-p:leading-relaxed prose-pre:bg-black/50 prose-pre:border prose-pre:border-white/10">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {msg.text}
+                    </ReactMarkdown>
+                  </div>
+                )}
               </div>
             </div>
           </div>

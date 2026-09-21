@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Github } from "lucide-react";
 import ThreeCanvas from "@/components/ThreeCanvas";
 import UploadZone from "@/components/UploadZone";
 import ChatInterface from "@/components/ChatInterface";
@@ -10,6 +11,18 @@ export default function Home() {
 
   return (
     <main className="min-h-screen font-[family-name:var(--font-geist-sans)] flex flex-col items-center justify-center p-8 relative overflow-hidden selection:bg-indigo-500/30">
+      
+      {/* GitHub Star Button */}
+      <a 
+        href="https://github.com/SheranShah10/Rag-System" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/80 hover:text-white transition-all backdrop-blur-md shadow-lg hover:shadow-indigo-500/20 group"
+      >
+        <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        <span className="text-sm font-medium tracking-wide">Star on GitHub</span>
+      </a>
+
       <ThreeCanvas />
       
       <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center pt-10">
