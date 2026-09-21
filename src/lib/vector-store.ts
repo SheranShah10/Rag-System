@@ -9,7 +9,7 @@ const globalForVectorStore = global as unknown as {
 // We will initialize the embeddings using the Gemini API Key
 // Make sure GEMINI_API_KEY is in your .env.local file
 const embeddings = new GoogleGenerativeAIEmbeddings({
-  modelName: "text-embedding-004", // Gemini's embedding model
+  model: "embedding-001", // Gemini's embedding model
 });
 
 export const getVectorStore = () => {
