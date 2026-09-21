@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVectorStore } from "@/lib/vector-store";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import pdf from "pdf-parse";
+import { PDFParse } from "pdf-parse";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +13,9 @@ export async function POST(req: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const data = await pdf(buffer);
+    const parser = new PDFParse({ data: buffer });
+    const data = await parser.getText();
+    await parser.destroy();
     const text = data.text;
 
     if (!text) {
