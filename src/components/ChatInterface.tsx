@@ -1,12 +1,12 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { Send, Sparkles, User } from "lucide-react";
+import { Send, Sparkles, User, X } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(useGSAP);
 
-export default function ChatInterface() {
+export default function ChatInterface({ onReset }: { onReset: () => void }) {
   const [messages, setMessages] = useState<{role: "user" | "ai", text: string}[]>([
     { role: "ai", text: "Neural mapping complete. I am ready to answer your questions based on the uploaded document." }
   ]);
@@ -87,12 +87,21 @@ export default function ChatInterface() {
           </div>
           <span>Secure AI Session</span>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-          </span>
-          <span className="text-xs text-white/50 tracking-wider uppercase font-semibold">Online</span>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 border-r border-white/10 pr-4">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+            </span>
+            <span className="text-xs text-white/50 tracking-wider uppercase font-semibold">Online</span>
+          </div>
+          <button 
+            onClick={onReset}
+            className="text-white/50 hover:text-white transition-colors p-1 hover:bg-white/10 rounded-full"
+            title="Close chat and upload new document"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
       </div>
 

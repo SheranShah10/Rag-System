@@ -32,7 +32,7 @@ export default function Home() {
           {!hasUploaded ? (
             <UploadZone onUploadComplete={() => setHasUploaded(true)} />
           ) : (
-            <ChatInterface />
+            <ChatInterface onReset={() => setHasUploaded(false)} />
           )}
         </div>
       </div>

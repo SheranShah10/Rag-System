@@ -12,6 +12,8 @@ export default function UploadZone({ onUploadComplete }: { onUploadComplete: () 
   const [success, setSuccess] = useState(false);
   const containerRef = useRef(null);
 
+  const [error, setError] = useState<string | null>(null);
+
   useGSAP(() => {
     gsap.from(containerRef.current, {
       y: 40,
@@ -25,6 +27,7 @@ export default function UploadZone({ onUploadComplete }: { onUploadComplete: () 
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
+    setError(null);
     const file = e.dataTransfer.files[0];
     if (file && file.type === "application/pdf") {
       await uploadFile(file);
@@ -32,6 +35,7 @@ export default function UploadZone({ onUploadComplete }: { onUploadComplete: () 
   };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     const file = e.target.files?.[0];
     if (file && file.type === "application/pdf") {
       await uploadFile(file);
@@ -39,6 +43,13 @@ export default function UploadZone({ onUploadComplete }: { onUploadComplete: () 
   };
 
   const uploadFile = async (file: File) => {
+    // Check file size (4.5MB limit for Vercel Serverless Functions)
+    const MAX_SIZE = 4.5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setError("File is too large! Maximum allowed size is 4.5MB.");
+      return;
+    }
+
     setIsUploading(true);
     const formData = new FormData();
     formData.append("file", file);
@@ -53,9 +64,13 @@ export default function UploadZone({ onUploadComplete }: { onUploadComplete: () 
         setTimeout(() => {
           onUploadComplete();
         }, 1500);
+      } else {
+        const data = await res.json();
+        setError(data.error || "Upload failed");
       }
     } catch (err) {
       console.error(err);
+      setError("Failed to connect to the server.");
     } finally {
       setIsUploading(false);
     }
@@ -106,6 +121,11 @@ export default function UploadZone({ onUploadComplete }: { onUploadComplete: () 
             <div className="text-center">
               <h3 className="text-2xl font-semibold text-white mb-2">Initialize Upload</h3>
               <p className="text-white/50 text-sm">Drag and drop your PDF here, or click to browse</p>
+              {error ? (
+                <p className="text-red-400 text-sm font-medium mt-3 bg-red-500/10 px-4 py-1.5 rounded-full inline-block">{error}</p>
+              ) : (
+                <p className="text-white/30 text-xs mt-3 uppercase tracking-wider font-semibold">Max file size: 4.5MB</p>
+              )}
             </div>
           </>
         )}
