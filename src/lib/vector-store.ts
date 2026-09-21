@@ -6,14 +6,15 @@ const globalForVectorStore = global as unknown as {
   vectorStore: MemoryVectorStore | undefined;
 };
 
-// We will initialize the embeddings using the Gemini API Key
-// Make sure GEMINI_API_KEY is in your .env.local file
-const embeddings = new GoogleGenerativeAIEmbeddings({
-  model: "gemini-embedding-2", // Gemini's current embedding model
-});
-
 export const getVectorStore = () => {
   if (!globalForVectorStore.vectorStore) {
+    // Initialize embeddings lazily so it doesn't crash Next.js build-time route collection
+    // Pass the specific Vercel environment variable since Langchain looks for GOOGLE_API_KEY by default
+    const embeddings = new GoogleGenerativeAIEmbeddings({
+      model: "gemini-embedding-2",
+      apiKey: process.env.GOOGLE_GENAI_API_KEY || "dummy-key-for-build",
+    });
+    
     globalForVectorStore.vectorStore = new MemoryVectorStore(embeddings);
   }
   return globalForVectorStore.vectorStore;
