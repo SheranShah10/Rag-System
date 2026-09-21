@@ -49,6 +49,11 @@ export default function ChatInterface({ onReset }: { onReset: () => void }) {
         body: JSON.stringify({ query: userMessage })
       });
 
+      if (!res.ok) {
+        const errData = await res.text();
+        throw new Error(errData);
+      }
+
       if (!res.body) throw new Error("No response body");
 
       const reader = res.body.getReader();
@@ -65,11 +70,30 @@ export default function ChatInterface({ onReset }: { onReset: () => void }) {
           return newMessages;
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       setMessages(prev => {
         const newMessages = [...prev];
-        newMessages[newMessages.length - 1].text = "System error: Neural synthesis failed during this request.";
+        let errorText = "System error: Neural synthesis failed during this request.";
+        
+        // Try to parse the JSON error to show a clean message
+        try {
+          const parsed = JSON.parse(error.message);
+          if (parsed.error && typeof parsed.error === 'string') {
+            try {
+              const innerParsed = JSON.parse(parsed.error);
+              errorText = `⚠️ **Google API Error:** ${innerParsed.error?.message || innerParsed.message || "Service unavailable."}`;
+            } catch {
+              errorText = `⚠️ **System Error:** ${parsed.error}`;
+            }
+          } else if (parsed.error?.message) {
+            errorText = `⚠️ **System Error:** ${parsed.error.message}`;
+          }
+        } catch {
+          errorText = `⚠️ **System Error:** ${error.message || "Service unavailable."}`;
+        }
+        
+        newMessages[newMessages.length - 1].text = errorText;
         return newMessages;
       });
     } finally {
