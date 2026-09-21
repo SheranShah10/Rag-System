@@ -25,7 +25,9 @@ ${query}
 
 Answer:`;
 
-    const ai = new GoogleGenAI({});
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GOOGLE_GENAI_API_KEY || process.env.GEMINI_API_KEY,
+    });
     
     const responseStream = await ai.models.generateContentStream({
       model: "gemini-3.6-flash",
