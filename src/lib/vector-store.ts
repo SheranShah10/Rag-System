@@ -1,4 +1,4 @@
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
 // Ensure we don't recreate the vector store on every hot reload in Next.js development
