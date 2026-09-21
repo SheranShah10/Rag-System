@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVectorStore } from "@/lib/vector-store";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import pdf from "pdf-parse/lib/pdf-parse.js";
 
 export async function POST(req: NextRequest) {
