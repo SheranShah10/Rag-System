@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getVectorStore } from "@/lib/vector-store";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import pdf from "pdf-parse/lib/pdf-parse.js";
+
+// Use require because it's an external CommonJS package
+const pdf = require("pdf-parse");
 
 export async function POST(req: NextRequest) {
   try {
