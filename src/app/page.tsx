@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Github } from "lucide-react";
+import { Star } from "lucide-react";
 import ThreeCanvas from "@/components/ThreeCanvas";
 import UploadZone from "@/components/UploadZone";
 import ChatInterface from "@/components/ChatInterface";
@@ -19,7 +19,7 @@ export default function Home() {
         rel="noopener noreferrer"
         className="fixed top-6 right-6 z-50 flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/80 hover:text-white transition-all backdrop-blur-md shadow-lg hover:shadow-indigo-500/20 group"
       >
-        <Github className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        <Star className="w-5 h-5 group-hover:scale-110 transition-transform text-yellow-400/80 group-hover:text-yellow-400" />
         <span className="text-sm font-medium tracking-wide">Star on GitHub</span>
       </a>
 
